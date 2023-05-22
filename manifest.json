@@ -7,7 +7,7 @@
   "orientation": "any",
   "scope": "/",
   "short_name": "Eising Commerce",
-  "start_url": "/",
+  "start_url": "/commerce-menu/",
   "theme_color": "#aaaaaa",
   "categories": [
     "business",
