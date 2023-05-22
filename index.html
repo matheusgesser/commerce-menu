@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+    <script>
+      window.addEventListener("DOMContentLoaded", () => {
+        const options = [
+          {
+            id: "adult",
+            name: "Adultos",
+            price: 55,
+          },
+          {
+            id: "child",
+            name: "Crianças",
+            price: 25,
+          },
+          {
+            id: "soda2l",
+            name: "Refrigerante 2L",
+            price: 8,
+          },
+          {
+            id: "beer",
+            name: "Cerveja",
+            price: 4,
+          },
+          {
+            id: "sodacan",
+            name: "Refrigerante Lata",
+            price: 3,
+          },
+          {
+            id: "water",
+            name: "Água",
+            price: 3,
+          },
+        ];
+
+        document.querySelectorAll(".decrease").forEach((button) => {
+          button.addEventListener("click", () => {
+            if (button.nextElementSibling.value != 0) {
+              button.nextElementSibling.value--;
+            }
+          });
+        });
+
+        document.querySelectorAll(".increase").forEach((button) => {
+          button.addEventListener("click", () => {
+            button.previousElementSibling.value++;
+          });
+        });
+
+        document.querySelectorAll("input").forEach((input) => {
+          input.addEventListener("input", calculate);
+          observeElement(input, "value", calculate);
+        });
+        document
+          .getElementById("money-received")
+          .addEventListener("keyup", calculate);
+
+        function calculate() {
+          let total = 0;
+          // ? Multiply each item quantity to its unit price and sums to total
+          options.forEach((item) => {
+            let quantity = document.getElementById(item.id).value;
+            total += quantity * item.price;
+          });
+
+          document.getElementById("total").textContent = total;
+
+          if (
+            document.getElementById("money-received").value != 0 &&
+            document.getElementById("money-received").value > total
+          ) {
+            document.getElementById("refund").textContent =
+              document.getElementById("money-received").value - total;
+            return;
+          }
+          document.getElementById("refund").textContent = 0;
+        }
+
+        function reset() {
+          document
+            .querySelectorAll("input")
+            .forEach((input) => (input.value = 0));
+          document.getElementById("total").textContent = 0;
+          document.getElementById("refund").textContent = 0;
+        }
+
+        let modal = document.querySelector("dialog");
+
+        // Close modal on click backdrop
+        modal.addEventListener("click", (e) => {
+          const rect = modal.getBoundingClientRect();
+          if (
+            e.clientY < rect.top ||
+            e.clientY > rect.bottom ||
+            e.clientX < rect.left ||
+            e.clientX > rect.right
+          ) {
+            modal.close();
+          }
+        });
+
+        document
+          .getElementById("save")
+          .addEventListener("click", () => modal.showModal());
+        document
+          .getElementById("cancel")
+          .addEventListener("click", () => modal.close());
+
+        document
+          .getElementById("localSave")
+          .addEventListener("click", localSave);
+        function localSave() {
+          let data = JSON.parse(localStorage.getItem("table")) || [];
+          document
+            .querySelectorAll("section.option > input")
+            .forEach((input) => {
+              if (input.value != 0) {
+                let price =
+                  options.filter((item) => item.id == input.id)[0].price *
+                  input.value;
+                let obj = {
+                  item: input.id,
+                  amount: parseInt(input.value),
+                  price: price,
+                  time: getTime(),
+                };
+                data.push(obj);
+              }
+            });
+          localStorage.setItem("table", JSON.stringify(data));
+          reset();
+          modal.close();
+          info();
+        }
+
+        function getTime() {
+          let now = new Date();
+          let hours = `${now.getHours()}`;
+          let minutes = `${now.getMinutes()}`;
+          if (hours.length == 1) {
+            hours = `0${hours}`;
+          }
+          if (minutes.length == 1) {
+            minutes = `0${minutes}`;
+          }
+          return `${hours}:${minutes}`;
+        }
+
+        // Display stored data on console
+        function info() {
+          let styling = `
+                          padding: 8px;
+                          background-color: black;
+                          color: white;
+                          font-weight: 800;
+                          font-family: Courier;
+                      `;
+          console.clear();
+          let data = JSON.parse(localStorage.getItem("table")) || [];
+          data.map((register) => console.log(register));
+          options.map((option) => {
+            let soldAmount = data
+              .filter((register) => register.item == option.id)
+              .reduce((total, register) => (total += register.amount), 0);
+            console.log(
+              `%c${option.name}: ${soldAmount}`,
+              `${styling} font-size: 1.1rem; padding: 4px;`
+            );
+          });
+          let total = data.reduce(
+            (total, register) => (total += register.price),
+            0
+          );
+          console.log(
+            `%cR$${total},00`,
+            `${styling} font-size: 1.3rem; border-left: 1px solid lightgreen; margin: 1rem 0;`
+          );
+        }
+        // https://stackoverflow.com/a/61975440
+        function observeElement(element, property, callback, delay = 0) {
+          let elementPrototype = Object.getPrototypeOf(element);
+          if (elementPrototype.hasOwnProperty(property)) {
+            let descriptor = Object.getOwnPropertyDescriptor(
+              elementPrototype,
+              property
+            );
+            Object.defineProperty(element, property, {
+              get: function () {
+                return descriptor.get.apply(this, arguments);
+              },
+              set: function () {
+                let oldValue = this[property];
+                descriptor.set.apply(this, arguments);
+                let newValue = this[property];
+                if (typeof callback == "function") {
+                  setTimeout(callback.bind(this, oldValue, newValue), delay);
+                }
+                return newValue;
+              },
+            });
+          }
+        }
+      });
+    </script>
+    <title>Calcular preço</title>
+  </head>
+  <body>
+    <main>
+      <section class="option">
+        <h2>Adulto</h2>
+        <button class="decrease" tabindex="-1">-</button>
+        <input id="adult" type="number" value="0" />
+        <button class="increase" tabindex="-1">+</button>
+      </section>
+      <section class="option">
+        <h2>Criança</h2>
+        <button class="decrease" tabindex="-1">-</button>
+        <input id="child" type="number" value="0" />
+        <button class="increase" tabindex="-1">+</button>
+      </section>
+      <section class="option">
+        <h2>Refrigerante 2L</h2>
+        <button class="decrease" tabindex="-1">-</button>
+        <input id="soda2l" type="number" value="0" />
+        <button class="increase" tabindex="-1">+</button>
+      </section>
+      <section class="option">
+        <h2>Cerveja</h2>
+        <button class="decrease" tabindex="-1">-</button>
+        <input id="beer" type="number" value="0" />
+        <button class="increase" tabindex="-1">+</button>
+      </section>
+      <section class="option">
+        <h2>Refrigerante Lata</h2>
+        <button class="decrease" tabindex="-1">-</button>
+        <input id="sodacan" type="number" value="0" />
+        <button class="increase" tabindex="-1">+</button>
+      </section>
+      <section class="option">
+        <h2>Água</h2>
+        <button class="decrease" tabindex="-1">-</button>
+        <input id="water" type="number" value="0" />
+        <button class="increase" tabindex="-1">+</button>
+      </section>
+
+      <section class="refund">
+        <h3>Recebido</h3>
+        <input id="money-received" type="number" value="0" />
+      </section>
+
+      <section class="result">
+        <h3>Total</h3>
+        <span>R$</span><strong id="total">0</strong><small>,00</small>
+
+        <h5>Troco</h5>
+        <span>R$</span><strong id="refund">0</strong><small>,00</small>
+      </section>
+
+      <section class="buttons">
+        <button id="save">Salvar</button>
+      </section>
+
+      <dialog id="save">
+        <h2>Atenção</h2>
+        <p>Você deseja salvar as informações no banco de dados?</p>
+        <section class="buttons">
+          <button id="cancel">Cancelar</button>
+          <button id="localSave">Salvar</button>
+        </section>
+      </dialog>
+    </main>
+  </body>
+</html>

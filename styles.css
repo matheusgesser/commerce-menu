@@ -1,0 +1,133 @@
+* {
+    margin: 0;
+    padding: 0;
+    user-select: none;
+    box-sizing: border-box;
+}
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    gap: 1.5rem;
+    font-family: Arial, sans-serif;
+    background-color: #222;
+    text-align: center;
+}
+/*::selection {
+    color: rgb(185, 185, 185);
+    background: rgb(255, 255, 255);
+} */
+input, button {
+    height: 3rem;
+    text-align: center;
+    border: 1px solid #fff;
+    background: none;
+    color: #fff;
+    font-size: 1.5rem;
+}
+*::-webkit-inner-spin-button,
+*::-webkit-outer-spin-button {
+    appearance: none;
+}
+section.option > h2 {
+    font-size: 1.5rem;
+    color: #fff;
+    text-align: center;
+}
+section.option > button {
+    cursor: pointer;
+    width: 3rem;
+}
+section.option > input {
+    outline: none;
+    width: 5rem;
+    border-left: none;
+    border-right: none;
+}
+section.option > button:first-of-type {
+    outline: none;
+    transform: translateX(5px);
+    border-right: none;
+}
+section.option > button:last-of-type {
+    outline: none;
+    transform: translateX(-5px);
+    border-left: none;
+}
+section.refund {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+}
+
+section.refund > input {
+    width: 8rem;
+    background: #444;
+}
+.buttons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+}
+.buttons > button {
+    font-family: Consolas, sans-serif;
+    height: 3rem;
+    width: 6rem;
+    font-size: .9rem;
+    border-radius: 4px;
+    cursor: pointer;
+    border: none;
+    color: #fff;
+}
+.buttons > button:first-of-type {
+    background: #000;
+}
+.buttons > button:last-of-type {
+    background: #005000;
+}
+section.result {
+    text-align: center;
+    font-size: 1rem;
+    color: #fff;
+    letter-spacing: .1rem;
+}
+section.result strong {
+    font-size: 3rem;
+}
+section.result span,
+section.result small {
+    font-family: monospace;
+    font-size: 2rem;
+    color: #ccc;
+}
+dialog::backdrop {
+    background: #000000ee;
+}
+dialog {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #111;
+    color: #fff;
+    padding: 2rem 4rem;
+    border: 1px solid #222;
+    border-radius: 10px;
+    box-shadow: 0 0 30px #ffffff10;
+    transition: all 2s linear;
+}
+dialog h2 {
+    font-size: 2rem;
+    margin: 2rem 0;
+}
+dialog p {
+    font-size: 1.2rem;
+}
+dialog section.buttons {
+    margin-top: 4rem;
+}
