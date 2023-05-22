@@ -5,9 +5,9 @@
   "display": "fullscreen",
   "name": "Eising Commerce",
   "orientation": "any",
-  "scope": "/",
+  "scope": "/commerce-menu",
   "short_name": "Eising Commerce",
-  "start_url": "/commerce-menu/",
+  "start_url": "/commerce-menu",
   "theme_color": "#aaaaaa",
   "categories": [
     "business",
