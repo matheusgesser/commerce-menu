@@ -2,7 +2,7 @@
   "background_color": "#222222",
   "description": "Price menu to Eising's party.",
   "dir": "ltr",
-  "display": "fullscreen",
+  "display": "standalone",
   "name": "Eising Commerce",
   "orientation": "any",
   "scope": "/commerce-menu",
