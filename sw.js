@@ -7,6 +7,7 @@ const PRECACHE_ASSETS = [
     '/windows11/',
     'index.html',
     'styles.css',
+    'eruda.min.js',
     'sw.js'
 ]
 
