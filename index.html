@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="manifest" href="manifest.json" />
     <link rel="stylesheet" type="text/css" href="styles.css" />
+    <script src="node_modules/eruda/eruda.js"></script>
     <script>
       window.addEventListener("DOMContentLoaded", () => {
         const options = [
@@ -212,6 +213,10 @@
         if (typeof navigator.serviceWorker !== "undefined") {
           navigator.serviceWorker.register("sw.js");
         }
+      });
+
+      eruda.init({
+        tool: ["console", "resources"],
       });
     </script>
     <title>Calcular preço</title>
